@@ -44,7 +44,7 @@ main(void)
       			delay--;
       			if (delay <= DELAY_MIN) {
 				fade_type = FADE_IN;
-				_delay_ms(200);
+				sleep(200);
 			}
     		}
 	}
