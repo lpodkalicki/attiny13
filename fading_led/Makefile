@@ -1,5 +1,7 @@
+CFLAGS = -std=c99 -Wall -g -Os -mmcu=attiny13 -I../
+
 all:
-	avr-gcc -std=c99 -Wall -g -Os -mmcu=attiny13 -o main.o main.c
+	avr-gcc ${CFLAGS} -o main.o main.c
 	avr-objcopy -j .text -j .data -O ihex main.o main.hex	
 
 flash:

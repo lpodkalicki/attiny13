@@ -3,24 +3,27 @@
  * ATtiny13 - blinking led
  */
 
-#define F_CPU	(1200000UL)
+#define F_CPU	(1200000UL)			// 1.2 MHz
 
-#include <stdlib.h>
-#include <avr/io.h>
-#include <util/delay.h>
+#include <attiny13_helpers.h>
 
-#define	LED_PORT	PB0		// Digital pin 0
+#define	LED_PIN	P0				// P0 (PB0) as LED pin
+
+static void
+init(void)
+{
+	pin_mode(LED_PIN, OUTPUT);		// Set LED pin as output
+	digital_reset();			// Set all digital pins to LOW
+}
 
 int
 main(void)
 {
-
-	DDRB = 1 << LED_PORT; 		// Set the LED pin as output
-	PORTB = 0; 			// Set all digital pins to LOW
+	init();
 
 	while (1) {
-		PORTB ^= 1 << LED_PORT; // Toggle LED pin
-		_delay_ms(200); 	// Pause a while (200ms)
+		digital_toggle(LED_PIN);	// Toggle LED pin
+		sleep(200); 			// Pause a while (200ms)
 	}
 
 	return (0);

@@ -5,15 +5,20 @@
 
 #define F_CPU	(1200000UL)			// 1.2 MHz
 
-#include <stdlib.h>
-#include <avr/io.h>
-#include <util/delay.h>
+#include <attiny13_helpers.h>
 
-#define LED_PORT	PB0
+#define LED_PIN		P0			// P0 (PB0) as LED pin
 #define	DELAY_MAX	(700)
 #define	DELAY_MIN	(1)
 #define	FADE_IN		(0)
 #define	FADE_OUT	(1)
+
+static void
+init(void)
+{
+	pin_mode(LED_PIN, OUTPUT);
+	digital_reset();
+}
 
 int
 main(void)
@@ -21,14 +26,14 @@ main(void)
 	uint8_t fade_type = FADE_IN;		// Start with fade-in
 	uint16_t delay = DELAY_MIN;		// Set delay start value
 
-	DDRB |= 1 << LED_PORT;			// Set the LED port as output
+	init();
 
 	while (1) {
 
-		PORTB |= (1 << LED_PORT); 	// Set the LED port bit to "1" - LED will be turned on.
-		_delay_loop_2(delay);		//  Wait a little. The delay function simply does N-number of "empty" loops.
-		PORTB &= ~(1 << LED_PORT);	// Set the LED port bit to "0" - LED will be turned off.
-		_delay_loop_2(DELAY_MAX-delay);	// Wait a while, again
+		digital_write(LED_PIN, HIGH);	// Set the LED port bit to "1" - LED will be turned on.
+		usleep(delay);			// Wait a little. The delay function simply does N-number of "empty" loops.
+		digital_write(LED_PIN, LOW);	// Set the LED port bit to "0" - LED will be turned off.
+		usleep(DELAY_MAX-delay);	// Wait a little, again
 
 		if (fade_type == FADE_IN) {
 			delay++;
