@@ -5,7 +5,7 @@
 
 #define F_CPU	(1200000UL)			// 1.2 MHz
 
-#include <attiny13_helpers.h>
+#include <attiny13_helper.h>
 
 #define	LED_PIN	P0				// P0 (PB0) as LED pin
 

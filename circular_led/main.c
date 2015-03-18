@@ -5,7 +5,7 @@
 
 #define F_CPU	(1200000UL)
 
-#include <attiny13_helpers.h>
+#include <attiny13_helper.h>
 
 #define	delay	(200)
 
