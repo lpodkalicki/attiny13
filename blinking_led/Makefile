@@ -5,3 +5,6 @@ all:
 flash:
 	sudo avrdude -c usbasp -p t13 -F
 	sudo avrdude -p attiny13 -c usbasp -U flash:w:main.hex:i -F -P usb
+
+clean:
+	rm -f *.o *.hex
