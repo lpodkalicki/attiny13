@@ -1,0 +1,11 @@
+# --
+# Copyright (c) 2015 by Lukasz Marcin Podkalicki <lukasz@podkalicki.com>
+#
+# example.in - common settings
+# --
+
+CC=avr-gcc
+OBJCOPY=avr-objcopy
+AVRDUDE=avrdude
+MCU=attiny13
+CFLAGS = -std=c99 -Wall -g -Os -mmcu=${MCU} -I../../

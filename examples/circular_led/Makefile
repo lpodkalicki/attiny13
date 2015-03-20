@@ -4,11 +4,7 @@
 # Makfile
 # --
 
-CC=avr-gcc
-OBJCOPY=avr-objcopy
-AVRDUDE=avrdude
-MCU=attiny13
-CFLAGS = -std=c99 -Wall -g -Os -mmcu=${MCU} -I../
+include ../example.in
 
 all:
 	${CC} ${CFLAGS} -o main.o main.c
