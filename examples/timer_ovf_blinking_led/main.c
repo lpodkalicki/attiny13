@@ -20,7 +20,7 @@ setup(void)
 	pin_mode(LED_PIN, OUTPUT);		// Set LED pin as output
 	digital_reset();			// Set all digital pins to LOW
 
-	timer_prescale1024(0);			// Prescale to 1024
+	timer_prescale1024();			// Prescale 1024
 	timer_ovf_enable();			// Enable timer OVF interrupt handler
 
 	enable_interrupts();			// Enable global interrapts
