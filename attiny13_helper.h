@@ -89,8 +89,13 @@ void loop();
 int
 main(void)
 {
+
 	setup();
-	loop();
+
+	while (1) {
+		loop();
+	}
+
 	return (0);
 }
 
