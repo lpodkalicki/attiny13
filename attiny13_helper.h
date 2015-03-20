@@ -1,10 +1,14 @@
-/*-
+/**
 * Copyright (c) 2015 by Lukasz Marcin Podkalicki <lukasz@podkalicki.com>
 * Attiny13 helper functions
 */
 
 #ifndef	_ATTINY13_HELPERS_H_
 #define	_ATTINY13_HELPERS_H_
+
+#ifndef	F_CPU
+# define F_CPU   (1200000UL)	// 1.2 MHz
+#endif	/* !F_CPU */
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -79,5 +83,15 @@ usleep(uint16_t value)
 	_delay_loop_2(value);
 }
 
-#endif	/* !_ATTINY13_HELPERS_H_ */
+void setup();
+void loop();
 
+int
+main(void)
+{
+	setup();
+	loop();
+	return (0);
+}
+
+#endif	/* !_ATTINY13_HELPERS_H_ */

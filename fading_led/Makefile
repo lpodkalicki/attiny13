@@ -1,12 +1,21 @@
-CFLAGS = -std=c99 -Wall -g -Os -mmcu=attiny13 -I../
+# --
+# Copyright (c) 2015 by Lukasz Marcin Podkalicki <lukasz@podkalicki.com>
+#
+# Makfile
+# --
+
+CC=avr-gcc
+OBJCOPY=avr-objcopy
+AVRDUDE=avrdude
+MCU=attiny13
+CFLAGS = -std=c99 -Wall -g -Os -mmcu=${MCU} -I../
 
 all:
-	avr-gcc ${CFLAGS} -o main.o main.c
-	avr-objcopy -j .text -j .data -O ihex main.o main.hex	
+	${CC} ${CFLAGS} -o main.o main.c
+	${OBJCOPY} -j .text -j .data -O ihex main.o main.hex	
 
 flash:
-	sudo avrdude -c usbasp -p t13 -F
-	sudo avrdude -p attiny13 -c usbasp -U flash:w:main.hex:i -F -P usb
+	${AVRDUDE} -p ${MCU} -c usbasp -U flash:w:main.hex:i -F -P usb
 
 clean:
 	rm -f *.o *.hex

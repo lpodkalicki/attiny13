@@ -3,14 +3,13 @@
  * Attiny13 - circular led
  */
 
-#define F_CPU	(1200000UL)
 
 #include <attiny13_helper.h>
 
 #define	delay	(200)
 
 void
-init(void)
+setup(void)
 {
 	pin_mode(P0, OUTPUT);
 	pin_mode(P1, OUTPUT);
@@ -20,11 +19,9 @@ init(void)
 	digital_reset();
 }
 
-int
-main(void)
+void
+loop(void)
 {
-
-	init();
 
 	while (1) {
 		digital_write(P0, HIGH);
@@ -47,6 +44,4 @@ main(void)
                 sleep(delay);
                 digital_write(P4, LOW);
 	}
-
-	return (0);
 }

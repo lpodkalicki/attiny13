@@ -1,9 +1,7 @@
-/*
+/**
  * Copyright (c) 2015 by Łukasz Marcin Podkalicki <lukasz@podkalicki.com>
  * ATtiny13 - pulsing led
  */
-
-#define F_CPU	(1200000UL)			// 1.2 MHz
 
 #include <attiny13_helper.h>
 
@@ -13,20 +11,18 @@
 #define	FADE_IN		(0)
 #define	FADE_OUT	(1)
 
-static void
-init(void)
+void
+setup(void)
 {
 	pin_mode(LED_PIN, OUTPUT);
 	digital_reset();
 }
 
-int
-main(void)
+void
+loop(void)
 {
 	uint8_t fade_type = FADE_IN;		// Start with fade-in
 	uint16_t delay = DELAY_MIN;		// Set delay start value
-
-	init();
 
 	while (1) {
 
@@ -48,6 +44,4 @@ main(void)
 			}
     		}
 	}
-
-	return (0);
 }
