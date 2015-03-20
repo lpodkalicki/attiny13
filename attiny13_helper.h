@@ -11,6 +11,7 @@
 #endif	/* !F_CPU */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 
 #define	LOW	(0)
@@ -25,6 +26,8 @@
 #define P4      PB4
 #define	P5	PB5
 
+/* ----- General helpers ----- */
+
 static inline void
 pin_mode(uint8_t pin, uint8_t mode)
 {
@@ -34,6 +37,22 @@ pin_mode(uint8_t pin, uint8_t mode)
 	else // mode == INPUT
 		DDRB &= ~(1 << pin);
 }
+
+static inline void
+sleep(uint16_t value)
+{
+
+        _delay_ms(value);
+}
+
+static inline void
+usleep(uint16_t value)
+{
+
+        _delay_loop_2(value);
+}
+
+/* ----- Digital I/O helpers ----- */
 
 static inline void
 digital_reset(void)
@@ -69,19 +88,55 @@ digital_read(uint8_t pin)
 	return LOW;
 }
 
-static inline void
-sleep(uint16_t value)
-{
+/* ----- Interrupt's helpers ----- */
 
-	_delay_ms(value);
-}
+#define	timer_prescale0()	TCCR0B &= ~((1<<CS02)|(1<<CS01)|(1<<CS00))
 
-static inline void
-usleep(uint16_t value)
-{
 
-	_delay_loop_2(value);
-}
+#define	timer_prescale1() do {				\
+	timer_prescale0();				\
+	TCCR0B |= 1<<CS00;				\
+} while(0)
+
+#define timer_prescale8() do {				\
+        timer_prescale0();				\
+        TCCR0B |= 1<<CS01;				\
+} while(0)
+
+#define timer_prescale64() do {				\
+        timer_prescale0();				\
+        TCCR0B |= (1<<CS01)|(1<<CS00);			\
+} while(0)
+
+#define timer_prescale256() do {			\
+        timer_prescale0();				\
+        TCCR0B |= (1<<CS02);				\
+} while(0)
+
+#define timer_prescale1024() do {			\
+        timer_prescale0();				\
+        TCCR0B |= (1<<CS02)|(1<<CS00);			\
+} while(0)
+
+// TIMER0 (OVF)
+#define	timer_ovf_handler()	ISR(TIM0_OVF_vect)
+#define	timer_ovf_enable() 	TIMSK0 |= 1 << TOIE0
+#define	timer_ovf_disable()	TIMSK0 &= ~(1 << TOIE0)
+
+// TIMER1 (COMPA)
+#define timer_compa_handler()	ISR(TIM0_COMPA_vect)
+#define	timer_compa_enable()	TIMSK0 |= 1 << OCIE0A
+#define	timer_compa_disable()	TIMSK0 &= ~(1 << OCIE0A)
+
+// TIMER2 (COMPB)
+#define timer_compb_handler()	ISR(TIM0_COMPB_vect)
+#define timer_compb_enable()	TIMSK0 |= 1 << OCIE0B
+#define timer_compb_disable()	TIMSK0 &= ~(1 << OCIE0B)
+
+#define	disable_interrupts	cli
+#define	enable_interrupts	sei
+
+/* ----- Layout's helpers ----- */
 
 void setup();
 void loop();
