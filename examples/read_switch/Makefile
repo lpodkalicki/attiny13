@@ -7,7 +7,7 @@
 include ../example.in
 
 all:
-	${CC} ${CFLAGS} -o main.o main.c
+	${CC} ${CFLAGS} -o main.o main.c ${HELPER_SRC}
 	${OBJCOPY} -j .text -j .data -O ihex main.o main.hex	
 
 flash:
