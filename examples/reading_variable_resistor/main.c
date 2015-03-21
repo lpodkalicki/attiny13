@@ -14,9 +14,8 @@ setup(void)
 {
 	pin_mode(LED_PIN, OUTPUT);		// Set LED pin as output
 	pin_mode(ADC_PIN, INPUT);		// Set ADC pin as input
-	digital_reset();			// Set all digital pins to LOW
 	digital_write(ADC_PIN, HIGH);		// Set pull-up
-	analog_enable();			// Enable ADC
+	adc_enable();				// Enable ADC
 }
 
 void

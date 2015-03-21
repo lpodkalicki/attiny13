@@ -6,7 +6,7 @@
 
 #include <attiny13_helper.h>
 
-#define	LED_PIN	P0				// P0 (PB0) as LED pin
+#define	LED_PIN	D0				// D0 (PB0) as LED pin
 
 timer_ovf_handler()
 {
@@ -18,7 +18,6 @@ void
 setup(void)
 {
 	pin_mode(LED_PIN, OUTPUT);		// Set LED pin as output
-	digital_reset();			// Set all digital pins to LOW
 
 	timer_prescale(1024);			// Prescale 1024
 	timer_ovf_enable();			// Enable timer OVF interrupt handler

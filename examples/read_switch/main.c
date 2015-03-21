@@ -5,8 +5,8 @@
 
 #include <attiny13_helper.h>
 
-#define	LED_PIN		P0					// P0 (PB0) as LED pin
-#define	SWITCH_PIN	P1					// P1 (PB1) as SWITCH pin
+#define	LED_PIN		D0					// D0 (PB0) as LED pin
+#define	SWITCH_PIN	D1					// D1 (PB1) as SWITCH pin
 
 void
 setup()

@@ -11,12 +11,11 @@
 void
 setup(void)
 {
-	pin_mode(P0, OUTPUT);
-	pin_mode(P1, OUTPUT);
-	pin_mode(P2, OUTPUT);
-	pin_mode(P3, OUTPUT);
-	pin_mode(P4, OUTPUT);
-	digital_reset();
+	pin_mode(D0, OUTPUT);
+	pin_mode(D1, OUTPUT);
+	pin_mode(D2, OUTPUT);
+	pin_mode(D3, OUTPUT);
+	pin_mode(D4, OUTPUT);
 }
 
 void
@@ -24,24 +23,24 @@ loop(void)
 {
 
 	while (1) {
-		digital_write(P0, HIGH);
+		digital_write(D0, HIGH);
 		sleep(delay);
-		digital_write(P0, LOW);
+		digital_write(D0, LOW);
 
-		digital_write(P1, HIGH);
+		digital_write(D1, HIGH);
                 sleep(delay);
-                digital_write(P1, LOW);
+                digital_write(D1, LOW);
 
-		digital_write(P2, HIGH);
+		digital_write(D2, HIGH);
                 sleep(delay);
-                digital_write(P2, LOW);
+                digital_write(D2, LOW);
 
-		digital_write(P3, HIGH);
+		digital_write(D3, HIGH);
                 sleep(delay);
-                digital_write(P3, LOW);
+                digital_write(D3, LOW);
 
-		digital_write(P4, HIGH);
+		digital_write(D4, HIGH);
                 sleep(delay);
-                digital_write(P4, LOW);
+                digital_write(D4, LOW);
 	}
 }

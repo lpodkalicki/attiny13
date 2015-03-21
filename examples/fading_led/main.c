@@ -5,7 +5,7 @@
 
 #include <attiny13_helper.h>
 
-#define LED_PIN		P0			// P0 (PB0) as LED pin
+#define LED_PIN		D0			// D0 (PB0) as LED pin
 #define	DELAY_MAX	(700)
 #define	DELAY_MIN	(1)
 #define	FADE_IN		(0)
