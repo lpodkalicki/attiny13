@@ -15,12 +15,12 @@ pin_mode(uint8_t pin, uint8_t mode)
 	if (mode == OUTPUT) {
 		tmp = SREG;
 		cli();
-		set_bit(DDRB, pin);
+		sbi(DDRB, pin);
 		SREG = tmp;
 	} else { // mode == INPUT
 		tmp = SREG;
 		cli();
-		clear_bit(DDRB, pin);
+		cbi(DDRB, pin);
 		SREG = tmp;
 	}
 }
@@ -49,49 +49,20 @@ digital_read(uint8_t pin)
 void
 digital_write(uint8_t pin, uint8_t value)
 {
-	uint8_t tmp;
 
 	if (value == HIGH) {
-		tmp = SREG;
-                cli();
-		set_bit(PORTB, pin);
-		SREG = tmp;
+		sbi(PORTB, pin);
 	} else { // value == LOW
-		tmp = SREG;
-		cli();
-		clear_bit(PORTB, pin);
-		SREG = tmp;
+		cbi(PORTB, pin);
 	}
 }
 
-void
-digital_toggle(uint8_t pin)
-{
-
-	PORTB ^= 1 << pin;
-}
-
-
 /* ----- Analog I/O ----- */
 
-static adc_ref_mode_t _adc_reference_mode = INTERNAL;
+static uint8_t _adc_reference_mode = 0;
 
 void
-analog_enable()
-{
-	
-	set_bit(ADCSRA, ADEN);
-}
-
-void
-analog_disable()
-{
-	
-	clear_bit(ADCSRA, ADEN);
-}
-
-void
-analog_reference(adc_ref_mode_t mode)
+analog_reference(uint8_t mode)
 {
 
 	_adc_reference_mode = mode;
@@ -101,11 +72,12 @@ static uint8_t
 _pin2mux(uint8_t pin)
 {
 	switch(pin) {
-	case ADC0: return 0;
 	case ADC1: return (1<<MUX0);
 	case ADC2: return (1<<MUX1);
 	case ADC3: return ((1<<MUX0)|(1<<MUX1));
-	default: return 0;
+	case ADC0: 	
+	default:
+		return 0;
 	}
 }
 
@@ -115,13 +87,13 @@ analog_read(uint8_t pin)
 	uint8_t low, high;
 
 	ADMUX = _pin2mux(pin);
-	if (_adc_reference_mode == VCC)
+	if (_adc_reference_mode > 0)
 		ADMUX |= (1 << REFS0);
 
 	//ADCSRA = (1<<ADEN)
 
-	set_bit(ADCSRA, ADSC);			// Run single conversion
-	while(bit_is_set(ADCSRA, ADSC));	// Wait conversion is done
+	sbi(ADCSRA, ADSC);					// Run single conversion
+	while(bit_is_set(ADCSRA, ADSC));			// Wait conversion is done
 
 	// Read values
 	low = ADCL;
@@ -134,23 +106,23 @@ analog_read(uint8_t pin)
 void
 analog_write(uint8_t pin, int value)
 {
-	
+	//pin_mode(pin, OUTPUT);				// Make sure the PWM output is enabled for this pin
+	if (pin == DAC0) {	
+		sbi(TCCR0A, COM0A1); 				// connect pwm to pin on timer 0, channel A
+		OCR0A = value; 					// set pwm duty
+	} else if (pin == DAC1) {
+		sbi(TCCR0A, COM0B1); 				// connect pwm to pin on timer 0, channel B
+		OCR0B = value; 					// set pwm duty	
+	}
 }
 
-static inline long
-map(long value, long in_min, long in_max, long out_min, long out_max)
-{
-
-	return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-/* ----- Interrupts ----- */
+/* ----- Timer ----- */
 
 void
-timer_prescale(uint16_t v)
+timer_prescale(uint16_t value)
 {
-	TCCR0B &= ~((1<<CS02)|(1<<CS01)|(1<<CS00));	// prescale 0 (clear)
-	switch (v) {
+	TCCR0B &= ~((1<<CS02)|(1<<CS01)|(1<<CS00));		// prescale 0 (clear)
+	switch (value) {
 	case 1: TCCR0B |= 1<<CS00; break;
 	case 8: TCCR0B |= 1<<CS01; break;
 	case 64: TCCR0B |= (1<<CS01)|(1<<CS00); break;
@@ -160,11 +132,29 @@ timer_prescale(uint16_t v)
 	}
 }
 
+void
+timer_wgm(waveform_generation_mode_t mode)
+{
+	TCCR0A &= ~((1 << WGM01)|(1 << WGM00));
+	TCCR0B &= ~(1 << WGM02); 
+	switch(mode) {
+	case PWM: TCCR0A |= 1<<WGM00; break; 
+	case CTC: TCCR0A |= 1<<WGM01; break;
+	case FAST_PWM: TCCR0A |= (1<<WGM01)|(1<<WGM00); break;
+	case PWMX: TCCR0A |= 1<<WGM00; TCCR0B |= 1<<WGM02; break;
+	case FAST_PWMX: TCCR0A |= (1<<WGM01)|(1<<WGM00); TCCR0B |= 1<<WGM02; break;	
+	case NORMAL:
+	default:
+		break;
+	}
+}
+
 /* ----- Layout's helpers ----- */
 
 int
 main(void)
 {
+	
 	setup();
 	while (1) loop();
 	return (0);

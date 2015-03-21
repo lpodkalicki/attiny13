@@ -3,8 +3,8 @@
 * Attiny13 helper functions
 */
 
-#ifndef	_ATTINY13_HELPERS_H_
-#define	_ATTINY13_HELPERS_H_
+#ifndef	_ATTINY13_HELPER_H_
+#define	_ATTINY13_HELPER_H_
 
 #ifndef	F_CPU
 # define F_CPU   (1200000UL)	// 1.2 MHz
@@ -19,13 +19,6 @@
 #define	INPUT	(0)
 #define	OUTPUT	(1)
 
-#define	P0	PB0
-#define P1      PB1
-#define P2      PB2
-#define P3      PB3
-#define P4      PB4
-#define	P5	PB5
-
 #define D0      PB0
 #define D1      PB1
 #define D2      PB2
@@ -38,14 +31,17 @@
 #define	ADC2	PB4
 #define	ADC3	PB3
 
-#define	AIN0	PB0
-#define	AIN1	PB1
-
+#define	DAC0	PB0
+#define	DAC1	PB1
 
 /* ----- Basics ----- */
 
-#define	clear_bit(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
-#define	set_bit(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#ifndef cbi
+#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#endif
+#ifndef sbi
+#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#endif
 
 #define sleep(value)	_delay_ms(value)	
 #define	usleep(value)	_delay_loop_2(value)
@@ -57,24 +53,29 @@ void pin_mode(uint8_t pin, uint8_t mode);
 void digital_reset(void);
 uint8_t digital_read(uint8_t pin);
 void digital_write(uint8_t pin, uint8_t value);
-void digital_toggle(uint8_t pin);
+#define digital_toggle(pin)	(PORTB ^= 1 << (pin))
 
-/* ----- Analog I/O ----- */
+/* ----- ADC/DAC I/O ----- */
 
-typedef enum {
-	INTERNAL = 0,
-	VCC
-} adc_ref_mode_t;
-
-void analog_enable();
-void analog_disable();
-void analog_reference(adc_ref_mode_t mode);
+#define adc_enable()	sbi(ADCSRA, ADEN)
+#define adc_disable()	cbi(ADCSRA, ADEN)
+void adc_reference(uint8_t mode);
 int analog_read(uint8_t pin);
 void analog_write(uint8_t pin, int value);
 
-/* ----- Interrupts ----- */
+/* ----- Timer ----- */
 
-void timer_prescale(uint16_t v);
+typedef enum {
+	NORMAL = 0,
+	PWM = 1,
+	CTC = 2,
+	FAST_PWM = 3,
+	PWMX = 4,
+	FAST_PWMX = 5
+} waveform_generation_mode_t;
+
+void timer_prescale(uint16_t value);
+void timer_wgm(waveform_generation_mode_t mode);
 
 // TIMER0 (OVF)
 #define	timer_ovf_handler()	ISR(TIM0_OVF_vect)
@@ -99,5 +100,5 @@ void timer_prescale(uint16_t v);
 void setup();
 void loop();
 
-#endif	/* !_ATTINY13_HELPERS_H_ */
+#endif	/* !_ATTINY13_HELPER_H_ */
 
