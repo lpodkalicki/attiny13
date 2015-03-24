@@ -1,12 +1,11 @@
-/*
+/**
  * Copyright (c) 2015 by Łukasz Marcin Podkalicki <lukasz@podkalicki.com>
- * Attiny13 - circular led
+ * Attiny13 - very simple circular led
  */
 
 
-#include <attiny13_helper.h>
-
-#define	delay	(200)
+#include <attiny13_digital.h>
+#include <attiny13_sleep.h>
 
 void
 setup(void)
@@ -21,26 +20,11 @@ setup(void)
 void
 loop(void)
 {
+	uint8_t pin;
 
-	while (1) {
-		digital_write(D0, HIGH);
-		sleep(delay);
-		digital_write(D0, LOW);
-
-		digital_write(D1, HIGH);
-                sleep(delay);
-                digital_write(D1, LOW);
-
-		digital_write(D2, HIGH);
-                sleep(delay);
-                digital_write(D2, LOW);
-
-		digital_write(D3, HIGH);
-                sleep(delay);
-                digital_write(D3, LOW);
-
-		digital_write(D4, HIGH);
-                sleep(delay);
-                digital_write(D4, LOW);
+	for (pin = 0; pin < 5; ++pin) {
+		digital_write(pin, HIGH);
+		sleep(200);
+		digital_write(pin, LOW);
 	}
 }

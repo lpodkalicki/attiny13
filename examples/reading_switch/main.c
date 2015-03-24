@@ -1,9 +1,10 @@
 /*
  * Copyright (c) 2015 by Łukasz Marcin Podkalicki <lukasz@podkalicki.com>
- * ATtiny13 - blinking led
+ * ATtiny13 - reading a switch on/off
  */
 
-#include <attiny13_helper.h>
+#include <attiny13_digital.h>
+#include <attiny13_sleep.h>
 
 #define	LED_PIN		D0					// D0 (PB0) as LED pin
 #define	SWITCH_PIN	D1					// D1 (PB1) as SWITCH pin
@@ -13,8 +14,7 @@ setup()
 {
 	pin_mode(LED_PIN, OUTPUT);				// Set LED pin as output
 	pin_mode(SWITCH_PIN, INPUT);				// Set SWITCH pin as input
-	digital_reset();					// Set all digital pins to LOW,
-	digital_write(SWITCH_PIN, HIGH);			// except SWITCH pin
+	digital_write(SWITCH_PIN, HIGH);			// except SWITCH pin (pull-up)
 }
 
 void

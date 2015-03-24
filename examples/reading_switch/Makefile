@@ -6,8 +6,16 @@
 
 include ../example.in
 
+LIB_SRC = \
+	${LIB_DIR}/attiny13.c \
+	${LIB_DIR}/attiny13_digital.c
+
+
+EXAMPLE_SRC = \
+	main.c 
+	
 all:
-	${CC} ${CFLAGS} -o main.o main.c ${HELPER_SRC}
+	${CC} ${CFLAGS} -o main.o ${EXAMPLE_SRC} ${LIB_SRC}
 	${OBJCOPY} -j .text -j .data -O ihex main.o main.hex	
 
 flash:

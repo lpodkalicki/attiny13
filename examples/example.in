@@ -8,5 +8,5 @@ CC=avr-gcc
 OBJCOPY=avr-objcopy
 AVRDUDE=avrdude
 MCU=attiny13
-CFLAGS = -std=c99 -Wall -g -Os -mmcu=${MCU} -I../../
-HELPER_SRC = ../../attiny13_helper.c
+CFLAGS=-std=c99 -Wall -g -Os -mmcu=${MCU} -I../../include
+LIB_DIR=../../src
