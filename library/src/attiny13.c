@@ -25,6 +25,12 @@ pin_mode(uint8_t pin, uint8_t mode)
 	}
 }
 
+static void default_setup() {};
+static void default_loop() {};
+
+void __attribute__ ((weak, alias ("default_setup"))) setup(void);
+void __attribute__ ((weak, alias ("default_loop"))) loop(void);
+
 int
 main(void)
 {	

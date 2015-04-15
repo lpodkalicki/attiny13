@@ -18,6 +18,7 @@
 
 char uart_getc();
 void uart_putc(char c);
+void uart_puth(char n);
 void uart_puts(const char *s);
 
 #endif	/* !_ATTINY13_UART_H_ */

@@ -93,6 +93,20 @@ uart_putc(char c)
 }
 
 void
+uart_puth(char n)
+{
+	if(((n>>4) & 15) < 10)
+		uart_putc('0' + ((n>>4)&15));
+	else
+		uart_putc('A' + ((n>>4)&15) - 10);
+	n <<= 4;
+	if(((n>>4) & 15) < 10)
+		uart_putc('0' + ((n>>4)&15));
+	else
+		uart_putc('A' + ((n>>4)&15) - 10);
+}
+
+void
 uart_puts(const char *s)
 {
      	while (*s) uart_putc(*(s++));
