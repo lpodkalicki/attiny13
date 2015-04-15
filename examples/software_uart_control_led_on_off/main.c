@@ -1,10 +1,9 @@
 /**
  * Copyright (c) 2015 by Łukasz Marcin Podkalicki <lukasz@podkalicki.com>
- * ATtiny13 - example how to control LED on/off using UART
+ * ATtiny13 - Example how to control LED on/off using Software UART
  */
 
 #include <attiny13_digital.h>
-#include <attiny13_sleep.h>
 #include <attiny13_uart.h>
 
 #define	LED_PIN	D0

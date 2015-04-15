@@ -3,17 +3,7 @@
  * ATtiny13 - Software UART example (parrot)
  */
 
-#include <attiny13_digital.h>
-#include <attiny13_sleep.h>
 #include <attiny13_uart.h>
-
-#define	LED_PIN	D0
-
-void
-setup(void)
-{
-	pin_mode(LED_PIN, OUTPUT);
-}
 
 void
 loop(void)

@@ -3,7 +3,6 @@
  * ATtiny13 - blinking led - version with timer
  */
 
-
 #include <attiny13_digital.h>
 #include <attiny13_timer.h>
 
@@ -11,7 +10,6 @@
 
 timer_ovf_handler()
 {
-
 	digital_toggle(LED_PIN);                // Toggle LED pin
 }
 
@@ -27,6 +25,5 @@ setup(void)
 void
 loop(void)
 {
-
 	while (1); 				// Empty loop
 }
