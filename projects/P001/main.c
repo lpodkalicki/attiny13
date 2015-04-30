@@ -7,7 +7,7 @@
 #include <attiny13_digital.h>
 #include <attiny13_sleep.h>
 
-#define	LED_PIN	D0				// D0 (PB0) as LED pin
+#define	LED_PIN	PB0				// PB0 as LED pin
 
 void
 setup(void)
