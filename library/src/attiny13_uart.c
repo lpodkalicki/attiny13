@@ -111,3 +111,9 @@ uart_puts(const char *s)
 {
      	while (*s) uart_putc(*(s++));
 }
+
+void
+uart_putp(const char *s)
+{
+	while (pgm_read_byte(s)) uart_putc(pgm_read_byte(s++));
+}
